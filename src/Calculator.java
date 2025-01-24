@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Calculator {
     /*
-    Operations supported: +, -, *, /, ^ (Exponents), % (Modulo operator)
+    Operations supported: +, -, *, /, ^ (Exponents), % (Modulo)
     */
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
@@ -58,7 +58,7 @@ public class Calculator {
                 case '*' -> res = prev * next;
                 case '/' -> res = prev / next;
                 case '^' -> res = Math.pow(prev, next);
-                case '%' -> res = prev%next;
+                case '%' -> res = prev % next;
             }
             list.set(i, String.valueOf(res));
             list.remove(i - 1);
@@ -119,14 +119,10 @@ public class Calculator {
             if (shouldRemoveFromList) {
                 toAdd.add(list.get(i));
                 list.remove(i);
-                if (i != 0)
-                    i--;
-                else i = -1;
+                i--;
             } else if (i != -1 && list.get(i).equals("(")) {
                 list.remove(i);
-                if (i != 0)
-                    i--;
-                else i = -1;
+                i--;
                 shouldRemoveFromList = true;
             }
         }
