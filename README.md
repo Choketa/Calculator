@@ -1,1 +1,1 @@
-A silly, basic calculator for basic calculations. W.I.P
+A silly, basic calculator for basic calculations.
