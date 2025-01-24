@@ -110,6 +110,7 @@ public class Calculator {
             if (i != -1 && list.get(i).equals(")")) {
                 shouldRemoveFromList = false;
                 list.set(i, String.valueOf(computeList(toAdd)));
+                toAdd.clear();
             }
             if (shouldRemoveFromList) {
                 toAdd.add(list.get(i));
