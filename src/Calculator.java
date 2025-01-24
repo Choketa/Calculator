@@ -108,11 +108,7 @@ public class Calculator {
         for (int i = 0; i < list.size(); i++) {
             if (i != -1 && list.get(i).equals(")")) {
                 shouldRemoveFromList = false;
-                list.remove(i);
-                if (i != 0)
-                    i--;
-                else i = -1;
-                list.add(String.valueOf(computeList(toAdd)));
+                list.set(i, String.valueOf(computeList(toAdd)));
             }
             if (shouldRemoveFromList) {
                 toAdd.add(list.get(i));
@@ -128,7 +124,6 @@ public class Calculator {
                 shouldRemoveFromList = true;
             }
         }
-        // return toReturn;
     }
 
     public static boolean isSign(char c) {
