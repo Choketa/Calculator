@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Calculator {
     /*
-    Operations supported: +, -, *, /, ^ (Exponents)
+    Operations supported: +, -, *, /, ^ (Exponents), % (Modulo operator)
     */
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
@@ -21,6 +21,9 @@ public class Calculator {
     public static double computeList(ArrayList<String> sep) {
         while (firstComputation(sep, '^')) {
             firstComputation(sep, '^');
+        }
+        while (firstComputation(sep, '%')) {
+            firstComputation(sep, '%');
         }
         while (firstComputation(sep, '*')) {
             firstComputation(sep, '*');
@@ -55,6 +58,7 @@ public class Calculator {
                 case '*' -> res = prev * next;
                 case '/' -> res = prev / next;
                 case '^' -> res = Math.pow(prev, next);
+                case '%' -> res = prev%next;
             }
             list.set(i, String.valueOf(res));
             list.remove(i - 1);
@@ -110,6 +114,7 @@ public class Calculator {
             if (i != -1 && list.get(i).equals(")")) {
                 shouldRemoveFromList = false;
                 list.set(i, String.valueOf(computeList(toAdd)));
+                System.out.println(list);
                 toAdd.clear();
             }
             if (shouldRemoveFromList) {
@@ -129,6 +134,6 @@ public class Calculator {
     }
 
     public static boolean isSign(char c) {
-        return c == '+' || c == '-' || c == '/' || c == '*' || c == '^' || c == '(' || c == ')';
+        return c == '+' || c == '-' || c == '/' || c == '*' || c == '^' || c == '(' || c == ')' || c == '%';
     }
 }
