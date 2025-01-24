@@ -77,6 +77,7 @@ public class Calculator {
         boolean hasDot = false;
         double multiplier = 0.1;
         for (int i = startIndex; i < str.length(); i++) {
+            if (str.charAt(i) == ' ') continue;
             if (!isSign(str.charAt(i))) {
                 if (str.charAt(i) == '.') {
                     hasDot = true;
