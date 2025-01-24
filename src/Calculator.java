@@ -3,14 +3,14 @@ import java.util.Scanner;
 
 public class Calculator {
     /*
-    Operations supported: +, -, *, /, ^ (Exponents), % (Modulo)
+    Supported operations: +, -, *, /, ^ (Exponents), % (Modulo)
     */
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         System.out.println("Input an equation");
         String input = scn.nextLine();
         while (!input.equalsIgnoreCase("OFF")) {
-            ArrayList<String> sep = separate(input);
+            ArrayList<String> sep = split(input);
             computeBrackets(sep);
             System.out.println(computeList(sep));
             System.out.println("Input an equation");
@@ -18,25 +18,14 @@ public class Calculator {
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     public static double computeList(ArrayList<String> sep) {
-        while (firstComputation(sep, '^')) {
-            firstComputation(sep, '^');
-        }
-        while (firstComputation(sep, '%')) {
-            firstComputation(sep, '%');
-        }
-        while (firstComputation(sep, '*')) {
-            firstComputation(sep, '*');
-        }
-        while (firstComputation(sep, '/')) {
-            firstComputation(sep, '/');
-        }
-        while (firstComputation(sep, '-')) {
-            firstComputation(sep, '-');
-        }
-        while (firstComputation(sep, '+')) {
-            firstComputation(sep, '+');
-        }
+        while (firstComputation(sep, '^'));
+        while (firstComputation(sep, '%'));
+        while (firstComputation(sep, '*'));
+        while (firstComputation(sep, '/'));
+        while (firstComputation(sep, '-'));
+        while (firstComputation(sep, '+'));
         return Double.parseDouble(sep.get(0));
     }
 
@@ -68,8 +57,8 @@ public class Calculator {
         return false;
     }
 
-    //Separates an equation into an arraylist
-    public static ArrayList<String> separate(String str) {
+    //Splits an equation into an arraylist
+    public static ArrayList<String> split(String str) {
         //Temp is non-primitive so operations with 0 would work
         Double temp = null;
         int startIndex = 0;
