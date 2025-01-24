@@ -78,15 +78,15 @@ public class Calculator {
             toReturn.add("-");
             startIndex = 1;
         }
-        boolean hasDot = false;
+        boolean shouldAddDecimals = false;
         double multiplier = 0.1;
         for (int i = startIndex; i < str.length(); i++) {
             if (str.charAt(i) == ' ') continue;
             if (!isSign(str.charAt(i))) {
                 if (str.charAt(i) == '.') {
-                    hasDot = true;
+                    shouldAddDecimals = true;
                     multiplier = 0.1;
-                } else if (hasDot) {
+                } else if (shouldAddDecimals) {
                     temp += (str.charAt(i) - '0') * multiplier;
                     multiplier /= 10;
                 } else {
@@ -97,7 +97,7 @@ public class Calculator {
                 if (temp != null) {
                     toReturn.add(String.valueOf(temp));
                 }
-                hasDot = false;
+                shouldAddDecimals = false;
                 multiplier = 0.1;
                 toReturn.add(String.valueOf(str.charAt(i)));
                 temp = null;
