@@ -3,35 +3,47 @@ import java.util.Scanner;
 
 public class Calculator {
     /*
-    Supported operations: +, -, *, /, ^ (Exponents), % (Modulo)
+    Supported operations:
+     + (Addition)
+     - (Subtraction)
+     * (Multiplication)
+     / (Division)
+     ! (Factorials)
+     ^ (Exponents)
+     % (Modulo)
     */
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-        System.out.println("Input an equation");
+        System.out.println("Input an equation:");
         String input = scn.nextLine();
         while (!input.equalsIgnoreCase("OFF")) {
-            ArrayList<String> sep = split(input);
-            computeBrackets(sep);
-            System.out.println(computeList(sep));
-            System.out.println("Input an equation");
+            System.out.println(compute(input));
+            System.out.println("Input an equation:");
             input = scn.nextLine();
         }
     }
 
+    public static double compute(String str) {
+        ArrayList<String> sep = split(str);
+        computeBrackets(sep);
+        return computeList(sep);
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
-    public static double computeList(ArrayList<String> sep) {
-        while (firstComputation(sep, '^'));
-        while (firstComputation(sep, '%'));
-        while (firstComputation(sep, '*'));
-        while (firstComputation(sep, '/'));
-        while (firstComputation(sep, '-'));
-        while (firstComputation(sep, '+'));
+    private static double computeList(ArrayList<String> sep) {
+        while (firstComputation(sep, '^')) ;
+        while (firstComputation(sep, '!')) ;
+        while (firstComputation(sep, '%')) ;
+        while (firstComputation(sep, '*')) ;
+        while (firstComputation(sep, '/')) ;
+        while (firstComputation(sep, '-')) ;
+        while (firstComputation(sep, '+')) ;
         return Double.parseDouble(sep.get(0));
     }
 
     //Computes the first occurrence of the given operation in the list
     //Returns true if there was any computation
-    public static boolean firstComputation(ArrayList<String> list, char c) {
+    private static boolean firstComputation(ArrayList<String> list, char c) {
         if (list.get(0).equals("-") && c == '-') {
             list.set(0, String.valueOf(-Double.parseDouble(list.get(1))));
             list.remove(1);
@@ -40,7 +52,9 @@ public class Calculator {
             if (!String.valueOf(c).equals(list.get(i))) continue;
             double res = 0;
             double prev = Double.parseDouble(list.get(i - 1));
-            double next = Double.parseDouble(list.get(i + 1));
+            double next = 0;
+            if (c != '!')
+                 next = Double.parseDouble(list.get(i + 1));
             switch (c) {
                 case '+' -> res = prev + next;
                 case '-' -> res = prev - next;
@@ -48,17 +62,19 @@ public class Calculator {
                 case '/' -> res = prev / next;
                 case '^' -> res = Math.pow(prev, next);
                 case '%' -> res = prev % next;
+                case '!' -> res = basicFactorial(prev);
             }
             list.set(i, String.valueOf(res));
             list.remove(i - 1);
-            list.remove(i);
+            if (c != '!')
+                list.remove(i);
             return true;
         }
         return false;
     }
 
     //Splits an equation into an arraylist
-    public static ArrayList<String> split(String str) {
+    private static ArrayList<String> split(String str) {
         //Temp is non-primitive so operations with 0 would work
         Double temp = null;
         int startIndex = 0;
@@ -71,8 +87,10 @@ public class Calculator {
         double multiplier = 0.1;
         for (int i = startIndex; i < str.length(); i++) {
             if (str.charAt(i) == ' ') continue;
+            //Number
             if (!isSign(str.charAt(i))) {
                 if (str.charAt(i) == '.') {
+                    if (temp == null) temp = 0.0;
                     shouldAddDecimals = true;
                     multiplier = 0.1;
                 } else if (shouldAddDecimals) {
@@ -93,10 +111,13 @@ public class Calculator {
             }
         }
         if (temp != null) toReturn.add(String.valueOf(temp));
+        if (toReturn.size() == 2 && toReturn.get(1).equals("!")) {
+            toReturn.add("+");
+        }
         return toReturn;
     }
 
-    public static void computeBrackets(ArrayList<String> list) {
+    private static void computeBrackets(ArrayList<String> list) {
         boolean shouldRemoveFromList = false;
         ArrayList<String> toAdd = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
@@ -110,14 +131,22 @@ public class Calculator {
                 list.remove(i);
                 i--;
             } else if (i != -1 && list.get(i).equals("(")) {
+                shouldRemoveFromList = true;
                 list.remove(i);
                 i--;
-                shouldRemoveFromList = true;
             }
         }
     }
 
-    public static boolean isSign(char c) {
-        return c == '+' || c == '-' || c == '/' || c == '*' || c == '^' || c == '(' || c == ')' || c == '%';
+    private static boolean isSign(char c) {
+        return c == '+' || c == '-' || c == '/' || c == '*' || c == '^' || c == '!' || c == '(' || c == ')' || c == '%';
+    }
+
+    private static double basicFactorial(double num) {
+        double result = 1;
+        for (int i = 2; i <= num; i++) {
+            result *= i;
+        }
+        return result;
     }
 }
