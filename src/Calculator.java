@@ -8,8 +8,8 @@ public class Calculator {
      - (Subtraction)
      * (Multiplication)
      / (Division)
-     ! (Factorials)
-     ^ (Exponents)
+     ! (Factorial)
+     ^ (Exponentiation)
      % (Modulo)
     */
     public static void main(String[] args) {
@@ -31,13 +31,13 @@ public class Calculator {
 
     @SuppressWarnings("StatementWithEmptyBody")
     private static double computeList(ArrayList<String> sep) {
-        while (firstComputation(sep, '^')) ;
-        while (firstComputation(sep, '!')) ;
-        while (firstComputation(sep, '%')) ;
-        while (firstComputation(sep, '*')) ;
-        while (firstComputation(sep, '/')) ;
-        while (firstComputation(sep, '-')) ;
-        while (firstComputation(sep, '+')) ;
+        while (firstComputation(sep, '^')) {}
+        while (firstComputation(sep, '!')) {}
+        while (firstComputation(sep, '%')) {}
+        while (firstComputation(sep, '*')) {}
+        while (firstComputation(sep, '/')) {}
+        while (firstComputation(sep, '-')) {}
+        while (firstComputation(sep, '+')) {}
         return Double.parseDouble(sep.get(0));
     }
 
@@ -54,7 +54,7 @@ public class Calculator {
             double prev = Double.parseDouble(list.get(i - 1));
             double next = 0;
             if (c != '!')
-                 next = Double.parseDouble(list.get(i + 1));
+                next = Double.parseDouble(list.get(i + 1));
             switch (c) {
                 case '+' -> res = prev + next;
                 case '-' -> res = prev - next;
@@ -75,7 +75,7 @@ public class Calculator {
 
     //Splits an equation into an arraylist
     private static ArrayList<String> split(String str) {
-        //Temp is non-primitive so operations with 0 would work
+        //Temp is non-primitive so operations with the number 0 would work
         Double temp = null;
         int startIndex = 0;
         ArrayList<String> toReturn = new ArrayList<>();
@@ -89,6 +89,7 @@ public class Calculator {
             if (str.charAt(i) == ' ') continue;
             //Number
             if (!isSign(str.charAt(i))) {
+                //Will start adding decimals
                 if (str.charAt(i) == '.') {
                     if (temp == null) temp = 0.0;
                     shouldAddDecimals = true;
@@ -96,17 +97,21 @@ public class Calculator {
                 } else if (shouldAddDecimals) {
                     temp += (str.charAt(i) - '0') * multiplier;
                     multiplier /= 10;
-                } else {
+                }/*Regular Numbers*/ else {
                     if (temp == null) temp = 0.0;
                     temp = temp * 10 + (str.charAt(i) - '0');
                 }
+            //Not a number
             } else {
-                if (temp != null) {
+                final boolean hasNumber = temp != null;
+                if (hasNumber) {
                     toReturn.add(String.valueOf(temp));
+                    if (str.charAt(i) == '(') toReturn.add("*");
                 }
                 shouldAddDecimals = false;
                 multiplier = 0.1;
                 toReturn.add(String.valueOf(str.charAt(i)));
+                if (hasNumber && str.charAt(i) == ')') toReturn.add("*");
                 temp = null;
             }
         }
