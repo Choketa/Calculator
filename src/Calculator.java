@@ -50,20 +50,7 @@ public class Calculator {
         }
         for (int i = 1; i < list.size() - 1; i++) {
             if (!String.valueOf(c).equals(list.get(i))) continue;
-            double res = 0;
-            double prev = Double.parseDouble(list.get(i - 1));
-            double next = 0;
-            if (c != '!')
-                next = Double.parseDouble(list.get(i + 1));
-            switch (c) {
-                case '+' -> res = prev + next;
-                case '-' -> res = prev - next;
-                case '*' -> res = prev * next;
-                case '/' -> res = prev / next;
-                case '^' -> res = Math.pow(prev, next);
-                case '%' -> res = prev % next;
-                case '!' -> res = basicFactorial(prev);
-            }
+            double res = getRes(list, c, i);
             list.set(i, String.valueOf(res));
             list.remove(i - 1);
             if (c != '!')
@@ -73,10 +60,28 @@ public class Calculator {
         return false;
     }
 
+    private static double getRes(ArrayList<String> list, char c, int i) {
+        double res = 0;
+        double prev = Double.parseDouble(list.get(i - 1));
+        double next = 0;
+        if (c != '!')
+            next = Double.parseDouble(list.get(i + 1));
+        switch (c) {
+            case '+' -> res = prev + next;
+            case '-' -> res = prev - next;
+            case '*' -> res = prev * next;
+            case '/' -> res = prev / next;
+            case '^' -> res = Math.pow(prev, next);
+            case '%' -> res = prev % next;
+            case '!' -> res = basicFactorial(prev);
+        }
+        return res;
+    }
+
     //Splits an equation into an arraylist
     private static ArrayList<String> split(String str) {
-        //Temp is non-primitive so operations with the number 0 would work
-        Double temp = null;
+        //Temp is NaN so operations with the number 0 would work
+        double temp = Double.NaN;
         int startIndex = 0;
         ArrayList<String> toReturn = new ArrayList<>();
         if (str.charAt(0) == '-') {
@@ -91,19 +96,19 @@ public class Calculator {
             if (!isSign(str.charAt(i))) {
                 //Will start adding decimals
                 if (str.charAt(i) == '.') {
-                    if (temp == null) temp = 0.0;
+                    if (Double.isNaN(temp)) temp = 0.0;
                     shouldAddDecimals = true;
                     multiplier = 0.1;
                 } else if (shouldAddDecimals) {
                     temp += (str.charAt(i) - '0') * multiplier;
                     multiplier /= 10;
                 }/*Regular Numbers*/ else {
-                    if (temp == null) temp = 0.0;
+                    if (Double.isNaN(temp)) temp = 0.0;
                     temp = temp * 10 + (str.charAt(i) - '0');
                 }
             //Not a number
             } else {
-                final boolean hasNumber = temp != null;
+                final boolean hasNumber = !Double.isNaN(temp);
                 if (hasNumber) {
                     toReturn.add(String.valueOf(temp));
                     if (str.charAt(i) == '(') toReturn.add("*");
@@ -112,10 +117,10 @@ public class Calculator {
                 multiplier = 0.1;
                 toReturn.add(String.valueOf(str.charAt(i)));
                 if (hasNumber && str.charAt(i) == ')') toReturn.add("*");
-                temp = null;
+                temp = Double.NaN;
             }
         }
-        if (temp != null) toReturn.add(String.valueOf(temp));
+        if (!Double.isNaN(temp)) toReturn.add(String.valueOf(temp));
         if (toReturn.size() == 2 && toReturn.get(1).equals("!")) {
             toReturn.add("+");
         }
@@ -149,9 +154,12 @@ public class Calculator {
 
     private static double basicFactorial(double num) {
         double result = 1;
-        for (int i = 2; i <= num; i++) {
+        for (int i = 2; i <= num; i++)
             result *= i;
-        }
         return result;
     }
+//    private static double recursiveFactorial(double num) {
+//        if (num == 1 || num == 0) return 1;
+//        return recursiveFactorial(num-1) * num;
+//    }
 }
