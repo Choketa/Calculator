@@ -25,6 +25,9 @@ public class Calculator {
 
     public static double compute(String str) {
         ArrayList<String> sep = split(str);
+//        for (String s : sep)
+//            System.out.print(s + " ");
+
         computeBrackets(sep);
         return computeList(sep);
     }
@@ -38,7 +41,7 @@ public class Calculator {
         while (firstComputation(sep, '/')) {}
         while (firstComputation(sep, '-')) {}
         while (firstComputation(sep, '+')) {}
-        return Double.parseDouble(sep.get(0));
+        return Double.parseDouble(sep.getFirst());
     }
 
     //Computes the first occurrence of the given operation in the list
@@ -59,6 +62,9 @@ public class Calculator {
         }
         return false;
     }
+//    private static void convertToNum(ArrayList<String> list) {
+//        for (int i = 0; i < list.size()-3)
+//    }
 
     private static double getRes(ArrayList<String> list, char c, int i) {
         double res = 0;
@@ -83,7 +89,7 @@ public class Calculator {
         //Temp is NaN so operations with the number 0 would work
         double temp = Double.NaN;
         int startIndex = 0;
-        ArrayList<String> toReturn = new ArrayList<>();
+        final ArrayList<String> toReturn = new ArrayList<>();
         if (str.charAt(0) == '-') {
             toReturn.add("-");
             startIndex = 1;
@@ -102,7 +108,7 @@ public class Calculator {
                 } else if (shouldAddDecimals) {
                     temp += (str.charAt(i) - '0') * multiplier;
                     multiplier /= 10;
-                }/*Regular Numbers*/ else {
+                } else { /*Integers*/
                     if (Double.isNaN(temp)) temp = 0.0;
                     temp = temp * 10 + (str.charAt(i) - '0');
                 }
