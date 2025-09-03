@@ -15,11 +15,13 @@ public class Calculator {
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         System.out.println("Input an equation:");
-        String input = scn.nextLine();
+        String input = scn.nextLine().replaceAll("pi", Math.PI+"")
+                .replaceAll("e", Math.E+"");;
         while (!input.equalsIgnoreCase("OFF")) {
             System.out.println(compute(input));
             System.out.println("Input an equation:");
-            input = scn.nextLine();
+            input = scn.nextLine().replaceAll("pi", Math.PI+"")
+                    .replaceAll("e", Math.E+"");
         }
     }
 
